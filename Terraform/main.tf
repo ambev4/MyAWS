@@ -90,11 +90,44 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
+# Creating key-pair on AWS using SSH-public key
+resource "aws_key_pair" "deployer" {
+  key_name   = "ubuntu-key"
+  public_key = file("${path.module}/ubuntu.pub")
+}
+
+# Creating a security group to restrict/allow inbound connectivity
+resource "aws_security_group" "network-security-group" {
+  name = "security-01"
+  vpc_id = aws_vpc.vpc.id
+
+  ingress {
+    description = "SSH AWS IP range"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["18.206.107.24/29"] # AWS Range
+  }
+
+  egress {
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+  tags = {
+    Name = "security-01"
+  }
+}
+
 # Terraform Resource Block - To Build EC2 instance in Public Subnet
 resource "aws_instance" "web_server" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public_subnets["sb-app-01"].id
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.public_subnets["sb-app-01"].id
+  key_name               = "ubuntu-key"
+  vpc_security_group_ids = [aws_security_group.network-security-group.id]
   tags = {
     Name = "ec2-app-01"
   }

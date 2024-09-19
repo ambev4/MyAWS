@@ -2,6 +2,10 @@
 /Python/global_templates/global/static/images/
 /Python/MyAWS/local_settings.py
 
+# SSH Key #
+ubuntu
+ubuntu.pub
+
 # Django #
 *.log
 *.pot
