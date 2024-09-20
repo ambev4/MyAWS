@@ -5,6 +5,7 @@
 # SSH Key #
 ubuntu
 ubuntu.pub
+*.ppk
 
 # Django #
 *.log
