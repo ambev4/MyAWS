@@ -109,6 +109,14 @@ resource "aws_security_group" "network-security-group" {
     cidr_blocks = ["18.206.107.24/29"] # AWS Range
   }
 
+  ingress {
+    description = "HTTP 80 nginx"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
   from_port   = 0
   to_port     = 0
