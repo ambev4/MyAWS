@@ -1,6 +1,19 @@
 {% load static %}
 <div class="post_body1">
-    <img src="{% static post.img %}">
+    <img src="{% static 'global/static/global/images/foto1.jpg' %}">
 </div>
-<div class="post_body2">{{ post.body }}</div>
+<div class="post_body2">
+    Descrição <a href="https://www.credly.com/badges/b7c251e3-b4cc-4cdc-b90b-34d241ffba29" target="_blank">
+        
+    </a>
+    {{ posts.descricao_pessoal }}
+</div>
+<div class="post_body1">
+    <img src="{% static 'global/static/global/images/foto2.png' %}">
+</div>
+<div class="post_body2">
+    Descrição <a href="https://www.credly.com/badges/b7c251e3-b4cc-4cdc-b90b-34d241ffba29" target="_blank">
+        {{ posts.descricao_ambiente }}
+    </a>
+</div>
 
