@@ -3,17 +3,52 @@
     <img src="{% static 'global/static/global/images/foto1.jpg' %}">
 </div>
 <div class="post_body2">
-    Descrição <a href="https://www.credly.com/badges/b7c251e3-b4cc-4cdc-b90b-34d241ffba29" target="_blank">
-        
-    </a>
-    {{ posts.descricao_pessoal }}
+    <p>{{ posts.descricao_pessoal }}</p>
+    <p>
+        <a href="https://www.linkedin.com/in/lucas-pereira-barbosa-64690220a" target="_blank">
+            LinkedIn
+        </a>
+        <br>
+        <a href="https://github.com/ambev4" target="_blank">
+            GitHub
+        </a>
+        <br>
+        <a href="" target="_blank">
+            Download currículo .doc
+        </a>
+    </p>
 </div>
-<div class="post_body1">
-    <img src="{% static 'global/static/global/images/foto2.png' %}">
+<div class="post_body3">
+    <img src="{% static 'global/static/global/images/Diagrama-ambiente-aws.png' %}">
 </div>
-<div class="post_body2">
-    Descrição <a href="https://www.credly.com/badges/b7c251e3-b4cc-4cdc-b90b-34d241ffba29" target="_blank">
+<div class="post_body4">
+    <p>
         {{ posts.descricao_ambiente }}
-    </a>
+    </p>
 </div>
+<div class="post_body5">
+    <pre><code class="language-python">
+        def saudacao(nome):
+        """Função para saudar o usuário"""
+        return f"Olá, {nome}!"
 
+        def somalista(lista):
+            """Função para calcular a soma dos elementos da lista"""
+            return sum(lista)
+            def saudacao(nome):
+        """Função para saudar o usuário"""
+        return f"Olá, {nome}!"
+
+        def somalista(lista):
+            """Função para calcular a soma dos elementos da lista"""
+            return sum(lista)
+            def saudacao(nome):
+        """Função para saudar o usuário"""
+        return f"Olá, {nome}!"
+        </code></pre>
+    </div>
+<div class="post_body6">
+    <p>
+        {{ posts.descricao_terraform }}
+    </p>
+</div>
