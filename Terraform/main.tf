@@ -1,3 +1,27 @@
+#-----------------------Keys------------------------
+
+# Creation of the RSA key for local connection
+resource "tls_private_key" "ubuntu-key" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+
+# Local file to save the pair of keys
+resource "local_file" "public_key_pem" {
+  content  = tls_private_key.ubuntu-key.public_key_openssh
+  filename = "Keys\\ubuntu.pub"
+}
+
+resource "local_sensitive_file" "private_key_pem" {
+  content  = tls_private_key.ubuntu-key.private_key_openssh
+  filename = "Keys\\ubuntu-key"
+}
+
+
+#------------------AWS------------------------------
+
+
+
 # Configure the AWS Provider
 provider "aws" {
   region = "us-east-1"
@@ -6,6 +30,28 @@ provider "aws" {
 #Retrieve the list of AZs in the current AWS region
 data "aws_availability_zones" "available" {}
 data "aws_region" "current" {}
+
+#Retrieve local IP Address
+data "http" "myip" {
+  url = "https://ipv4.icanhazip.com"
+}
+
+# Terraform Data Block - To Lookup Latest Ubuntu 24.04 AMI Image
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"]
+}
 
 #Define the VPC
 resource "aws_vpc" "vpc" {
@@ -69,36 +115,14 @@ resource "aws_route_table_association" "public" {
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "igw-01"
+    Name      = "igw-01"
+    Terraform = "true"
   }
-}
-
-# Terraform Data Block - To Lookup Latest Ubuntu 24.04 AMI Image
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"]
-}
-
-# Creating key-pair on AWS using SSH-public key
-resource "aws_key_pair" "deployer" {
-  key_name   = "ubuntu-key"
-  public_key = file("${path.module}/ubuntu.pub")
 }
 
 # Creating a security group to restrict/allow inbound connectivity
 resource "aws_security_group" "network-security-group" {
-  name = "security-01"
+  name   = "security-01"
   vpc_id = aws_vpc.vpc.id
 
   ingress {
@@ -106,7 +130,7 @@ resource "aws_security_group" "network-security-group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["18.206.107.24/29"] # AWS Range
+    cidr_blocks = ["18.206.107.24/29", "${chomp(data.http.myip.response_body)}/32"] # AWS Range e IP local
   }
 
   ingress {
@@ -118,25 +142,44 @@ resource "aws_security_group" "network-security-group" {
   }
 
   egress {
-  from_port   = 0
-  to_port     = 0
-  protocol    = "-1"
-  cidr_blocks = ["0.0.0.0/0"]
-}
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   tags = {
-    Name = "security-01"
+    Name      = "security-01"
+    Terraform = "true"
   }
+}
+
+# Creating key-pair on AWS using SSH-public key
+resource "aws_key_pair" "ubuntu-key-pair" {
+  key_name   = "ubuntu-key"
+  public_key = tls_private_key.ubuntu-key.public_key_openssh
 }
 
 # Terraform Resource Block - To Build EC2 instance in Public Subnet
-resource "aws_instance" "web_server" {
+resource "aws_instance" "web_server1" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.public_subnets["sb-app-01"].id
-  key_name               = "ubuntu-key"
   vpc_security_group_ids = [aws_security_group.network-security-group.id]
-  tags = {
-    Name = "ec2-app-01"
+  key_name               = aws_key_pair.ubuntu-key-pair.key_name
+  connection {
+    user        = "ubuntu"
+    private_key = tls_private_key.ubuntu-key.private_key_openssh
+    host        = self.public_ip
   }
+
+  provisioner "remote-exec" {
+    inline = var.web_server_cmds
+  }
+
+  tags = {
+    Name      = "ec2-app-01"
+    Terraform = "true"
+  }
+
 }
