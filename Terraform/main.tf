@@ -4,11 +4,6 @@ module "key_ssh" {
 }
 
 # Criação do ambiente AWS
-# Configure the AWS Provider
-provider "aws" {
-  region = "us-east-1"
-}
-
 module "vpc_net" {
   source = "./modules/vpc_net"
 }

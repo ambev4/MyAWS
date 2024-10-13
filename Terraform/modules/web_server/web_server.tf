@@ -11,6 +11,10 @@ resource "aws_instance" "web_server1" {
     host        = self.public_ip
   }
 
+  provisioner "local-exec" {
+    command = var.ssh_permission_local
+  }
+
   provisioner "remote-exec" {
     inline = var.web_server_cmds
   }
