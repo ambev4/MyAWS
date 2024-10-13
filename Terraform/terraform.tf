@@ -1,12 +1,12 @@
 terraform {
-  backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = "Ambev-Lab1"
+  # backend "remote" {
+  #   hostname     = "app.terraform.io"
+  #   organization = "Ambev-Lab1"
 
-    workspaces {
-      name = "MyAWS"
-    }
-  }
+  #   workspaces {
+  #     name = "MyAWS"
+  #   }
+  # }
   required_providers {
     aws = {
       source  = "hashicorp/aws"

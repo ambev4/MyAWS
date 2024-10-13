@@ -13,6 +13,7 @@ resource "aws_instance" "web_server1" {
 
   provisioner "local-exec" {
     command = var.ssh_permission_local
+    interpreter = ["PowerShell", "-Command"]
   }
 
   provisioner "remote-exec" {
