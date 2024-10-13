@@ -68,11 +68,3 @@ resource "aws_internet_gateway" "internet_gateway" {
     Terraform = "true"
   }
 }
-
-output "opt_vpc_id" { # Retorna o ID da VPC criada no módulo
-  value = aws_vpc.vpc
-}
-
-output "opt_public_subnets" { # Retorna as public subnets criadas no módulo
-    value = aws_subnet.public_subnets
-}

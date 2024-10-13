@@ -32,6 +32,3 @@ resource "aws_security_group" "network-security-group" {
   }
 }
 
-output "opt_security_group" {
-    value = aws_security_group.network-security-group
-}

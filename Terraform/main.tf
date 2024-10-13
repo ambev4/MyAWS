@@ -37,64 +37,16 @@ data "aws_ami" "ubuntu" {
 
 module "security_group" {
   source          = "./modules/security_group"
-  security_vpc_id = module.vpc_net.opt_vpc_id
-  security_my_ip = chomp(data.http.myip.response_body)
+  security_vpc_id = module.vpc_net.outp_vpc_id
+  security_my_ip  = chomp(data.http.myip.response_body)
 }
 
-# # Creating a security group to restrict/allow inbound connectivity
-# resource "aws_security_group" "network-security-group" {
-#   name   = "security-01"
-#   vpc_id = module.vpc_net.opt_vpc_id
-
-#   ingress {
-#     description = "SSH AWS IP range"
-#     from_port   = 22
-#     to_port     = 22
-#     protocol    = "tcp"
-#     cidr_blocks = ["18.206.107.24/29", "${chomp(data.http.myip.response_body)}/32"] # AWS Range e IP local
-#   }
-
-#   ingress {
-#     description = "HTTP 80 nginx"
-#     from_port   = 80
-#     to_port     = 80
-#     protocol    = "tcp"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-#   egress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-#   tags = {
-#     Name      = "security-01"
-#     Terraform = "true"
-#   }
-# }
-
-# Terraform Resource Block - To Build EC2 instance in Public Subnet
-resource "aws_instance" "web_server1" {
+module "web_server" {
+  source                 = "./modules/web_server"
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
-  subnet_id              = module.vpc_net.opt_public_subnets["sb-app-01"].id
-  vpc_security_group_ids = module.security_group.opt_security_group.id
-  key_name               = module.key_ssh.opt_key_name
-  connection {
-    user        = "ubuntu"
-    private_key = module.key_ssh.opt_private_key
-    host        = self.public_ip
-  }
-
-  provisioner "remote-exec" {
-    inline = var.web_server_cmds
-  }
-
-  tags = {
-    Name      = "ec2-app-01"
-    Terraform = "true"
-  }
-
+  subnet_id              = module.vpc_net.outp_public_subnets["sb-app-01"].id
+  vpc_security_group_ids = [module.security_group.outp_security_group_id]
+  key_name               = module.key_ssh.outp_key_name
+  private_key            = module.key_ssh.outp_private_key
 }
