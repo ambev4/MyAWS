@@ -7,12 +7,12 @@ resource "tls_private_key" "ubuntu_key" {
 # Local file to save the pair of keys
 resource "local_file" "public_key_pem" {
   content  = tls_private_key.ubuntu_key.public_key_openssh
-  filename = "Keys\\ubuntu.pub"
+  filename = "keys\\ubuntu.pub"
 }
 
 resource "local_sensitive_file" "private_key_pem" {
   content  = tls_private_key.ubuntu_key.private_key_openssh
-  filename = "Keys\\ubuntu_key"
+  filename = "keys\\ubuntu_key"
 }
 
 # Creating key-pair on AWS using SSH-public key

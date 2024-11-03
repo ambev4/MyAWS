@@ -5,10 +5,10 @@ data "aws_region" "current" {}
 #Define the VPC
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
+  enable_dns_hostnames = true
 
   tags = {
-    Name      = var.vpc_name
-    Terraform = "true"
+    Name = var.vpc_name
   }
 }
 
@@ -19,8 +19,7 @@ resource "aws_subnet" "sb-hlog-01" {
   availability_zone = "us-east-1b"
 
   tags = {
-    Name      = "sb-hlog-01"
-    Terraform = "true"
+    Name = "sb-hlog-01"
   }
 }
 
@@ -33,8 +32,7 @@ resource "aws_subnet" "public_subnets" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name      = each.key
-    Terraform = "true"
+    Name = each.key
   }
 }
 
@@ -47,8 +45,7 @@ resource "aws_route_table" "public_route_table" {
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
   tags = {
-    Name      = "rtb-01"
-    Terraform = "true"
+    Name = "rtb-01"
   }
 }
 
@@ -64,7 +61,6 @@ resource "aws_route_table_association" "public" {
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name      = "igw-01"
-    Terraform = "true"
+    Name = "igw-01"
   }
 }

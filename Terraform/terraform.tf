@@ -4,7 +4,7 @@ terraform {
   #   organization = "Ambev-Lab1"
 
   #   workspaces {
-  #     name = "MyAWS"
+  #     name = "myaws-lab1"
   #   }
   # }
   required_providers {
@@ -29,4 +29,12 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+  default_tags {
+    tags = {
+      Owner       = "Lucas"
+      Environment = "Lab1"
+      Project     = "MyAWS"
+      Provisoned  = "Terraform"
+    }
+  }
 }

@@ -44,4 +44,5 @@ module "web_server" {
   vpc_security_group_ids = [module.security_group.outp_security_group_id]
   key_name               = module.key_ssh.outp_key_name
   private_key            = module.key_ssh.outp_private_key
+  private_key_file       = module.key_ssh.outp_private_key_file
 }

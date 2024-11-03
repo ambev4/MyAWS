@@ -4,12 +4,7 @@ variable "subnet_id" {}
 variable "vpc_security_group_ids" {}
 variable "key_name" {}
 variable "private_key" {}
-
-variable "ssh_permission_local" {
-  description = "Comandos para permissão local de ssh key"
-  type        = string
-  default     = "icacls Keys\\ubuntu_key /inheritance:r; icacls Keys\\ubuntu_key /grant:r lucas:\"(M)\""
-}
+variable "private_key_file" {}
 
 variable "web_server_cmds" {
   description = "Comandos de preparação do webserver"

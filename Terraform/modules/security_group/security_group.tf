@@ -1,7 +1,6 @@
 resource "aws_security_group" "network-security-group" {
   name   = "security-01"
   vpc_id = var.security_vpc_id
-  #   my_ip = var.security_my_ip
 
   ingress {
     description = "SSH AWS IP range"
@@ -27,8 +26,7 @@ resource "aws_security_group" "network-security-group" {
   }
 
   tags = {
-    Name      = "security-01"
-    Terraform = "true"
+    Name = "security-01"
   }
 }
 

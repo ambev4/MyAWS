@@ -12,8 +12,9 @@ resource "aws_instance" "web_server1" {
   }
 
   provisioner "local-exec" {
-    command = var.ssh_permission_local
+    command     = "icacls ${var.private_key_file} /inheritance:r; icacls ${var.private_key_file} /grant:r lucas:\"(M)\""
     interpreter = ["PowerShell", "-Command"]
+    #"chmod 600 ${var.private_key_file}"#
   }
 
   provisioner "remote-exec" {
@@ -21,8 +22,7 @@ resource "aws_instance" "web_server1" {
   }
 
   tags = {
-    Name      = "ec2-app-01"
-    Terraform = "true"
+    Name = "ec2-app-01"
   }
 
 }
