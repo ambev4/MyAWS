@@ -1,0 +1,24 @@
+services:
+  myaws:
+    build: ./alpine
+    image: myaws/alpine2
+    expose:
+      - "8000"
+    container_name: myaws
+    networks:
+      - myaws-network
+
+  web:
+    build: ./nginx
+    image: myaws/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - myaws
+    networks:
+      - myaws-network
+    container_name: myaws-web
+  
+networks:
+  myaws-network:
+    driver: bridge
