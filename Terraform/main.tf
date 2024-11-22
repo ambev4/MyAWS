@@ -36,13 +36,13 @@ module "security_group" {
   security_my_ip  = chomp(data.http.myip.response_body)
 }
 
-module "web_server" {
-  source                 = "./modules/web_server"
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  subnet_id              = module.vpc_net.outp_public_subnets["sb-app-01"].id
-  vpc_security_group_ids = [module.security_group.outp_security_group_id]
-  key_name               = module.key_ssh.outp_key_name
-  private_key            = module.key_ssh.outp_private_key
-  private_key_file       = module.key_ssh.outp_private_key_file
-}
+# module "web_server" {
+#   source                 = "./modules/web_server"
+#   ami                    = data.aws_ami.ubuntu.id
+#   instance_type          = "t2.micro"
+#   subnet_id              = module.vpc_net.outp_public_subnets["sb-app-01"].id
+#   vpc_security_group_ids = [module.security_group.outp_security_group_id]
+#   key_name               = module.key_ssh.outp_key_name
+#   private_key            = module.key_ssh.outp_private_key
+#   private_key_file       = module.key_ssh.outp_private_key_file
+# }
