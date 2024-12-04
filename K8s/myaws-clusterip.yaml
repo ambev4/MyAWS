@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myaws # Nome do service é acessível de dentro do Cluster
+spec:
+  type: ClusterIP
+  ports:
+  - name: myaws-service-p
+    targetPort: 8000
+    port: 8000
+    protocol: TCP
+  selector:
+    tier: backend

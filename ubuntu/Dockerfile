@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-LABEL "Project"="MyAWS" "SO"="Ubuntu" "microservice"="true"
+LABEL "Project"="myaws" "SO"="ubuntu" "microservice"="true"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONV=/home/ubuntu/myawsapp/Python/venv/bin/python3
 

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myaws-app
+  labels:
+    app: myaws-app
+    tier: backend
+    project: myaws-k8s
+spec:
+  containers:
+    - name: myaws-app
+      image: ambev4/lab1:myaws-backend
+      ports:
+      - name: myaws-app-p
+        containerPort: 8000

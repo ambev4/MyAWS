@@ -1,5 +1,5 @@
 FROM python:alpine
-LABEL "Project"="MyAWS" "SO"="Alpine" "microservice"="true"
+LABEL "Project"="myaws" "SO"="alpine" "microservice"="true"
 
 WORKDIR /
 RUN apk update && apk upgrade

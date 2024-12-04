@@ -1,5 +1,5 @@
 FROM nginx:alpine
-LABEL "Project"="MyAWS" "SO"="Alpine" "microservice"="true"
+LABEL "Project"="myaws" "SO"="alpine" "microservice"="true"
 
 RUN apk update && apk upgrade
 RUN mkdir -p /myawsapp/static-server/global/static/global/images
